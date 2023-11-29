@@ -35,9 +35,7 @@ namespace {
     uintptr_t game_srv_object_addr;
 
     void Init() {
-#if GWCA_CTOS_ENABLED
         SendPacket_Func = (SendPacket_pt)Scanner::FindAssertion("p:\\code\\net\\msg\\msgconn.cpp", "bytes >= sizeof(dword)", -0x67);
-#endif
         uintptr_t address = Scanner::FindAssertion("p:\\code\\gw\\net\\cli\\gcgamecmd.cpp","No valid case for switch variable 'code'", -0x32);
         if (Verify(address))
             game_srv_object_addr = *(uintptr_t *)address;
@@ -47,12 +45,8 @@ namespace {
         GWCA_INFO("[SCAN] SendPacket = %p", SendPacket_Func);
         GWCA_INFO("[SCAN] CtoGSObjectPtr = %p", game_srv_object_addr);
 
-#ifdef _DEBUG
-#if GWCA_CTOS_ENABLED
         GWCA_ASSERT(SendPacket_Func);
-#endif
         GWCA_ASSERT(game_srv_object_addr);
-#endif
         HookBase::CreateHook(SendPacket_Func, CtoSHandler_Func, (void**)&RetSendPacket);
 
     }

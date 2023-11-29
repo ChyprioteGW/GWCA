@@ -106,7 +106,7 @@ namespace GW {
         GWCA_API uint32_t WithdrawGold(uint32_t amount = 0);
 
         // Open locked chest; requires valid target. use_key = true to use a key if available rather than lockpick
-        GWCA_API bool OpenLockedChest(bool use_key = true);
+        GWCA_API void OpenLockedChest();
         
         // Move item to a new position (bag, slot). Used to merge stacks
         // slot start at 0

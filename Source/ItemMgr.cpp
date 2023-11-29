@@ -20,6 +20,12 @@
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/Module.h>
 #include <GWCA/Managers/StoCMgr.h>
+<<<<<<< HEAD
+=======
+#include <GWCA/Managers/CtoSMgr.h>
+#include <GWCA/Managers/ChatMgr.h>
+#include <GWCA/Managers/GameThreadMgr.h>
+>>>>>>> 3b36018 (restore dialogs ctos)
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/UIMgr.h>
 #include <GWCA/Context/AccountContext.h>
@@ -568,14 +574,17 @@ namespace GW {
             return ChangeGold(gold_character, gold_storage) ? will_move : 0;
         }
 
-        bool OpenLockedChest(bool use_key) {
+        void OpenLockedChest() {
             auto* target = Agents::GetTarget();
-            if (!(target && target->GetIsGadgetType()))
-                return false;
-            auto* me = Agents::GetPlayer();
-            if (!(me && GetDistance(me->pos, target->pos) < Constants::Range::Area))
-                return false;
-            return GW::UI::SendUIMessage(GW::UI::UIMessage::kSendDialog, use_key ? (void*)1 : (void*)2);
+            if (!target || !target->GetIsGadgetType()) {
+                WriteChat(GW::Chat::CHANNEL_GWCA1, L"Target is not a locked chest", L"OpenChest");
+                return;
+            }
+            GW::CtoS::SendPacket(0xC, GAME_CMSG_INTERACT_GADGET, target->agent_id, 0);
+            bool success = GW::CtoS::SendPacket(0x8, GAME_CMSG_SEND_SIGNPOST_DIALOG, 0x2);
+            if (!success) {
+                WriteChat(GW::Chat::CHANNEL_GWCA1, L"Failed to open target locked chest", L"OpenChest");
+            }
         }
 
         bool MoveItem(const Item* from, const Bag* bag, uint32_t slot, uint32_t quantity) {

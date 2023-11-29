@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include <format>
+
+#include <GWCA/Packets/Opcodes.h>
 
 #include <GWCA/Context/GameContext.h>
 #include <GWCA/Context/AgentContext.h>
@@ -16,6 +19,8 @@
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/UIMgr.h>
+#include <GWCA/Managers/CtoSMgr.h>
+#include <GWCA/Managers/ChatMgr.h>
 
 #include <GWCA/Utilities/Hooker.h>
 #include <GWCA/Utilities/Scanner.h>
@@ -257,8 +262,12 @@ namespace GW {
         uint32_t GetLastDialogId() {
             return last_dialog_id;
         }
-        bool SendDialog(uint32_t dialog_id) {
-            return UI::SendUIMessage(UI::UIMessage::kSendDialog, (void*)dialog_id);
+        bool SendDialog(uint32_t dialog_id)
+        {
+            WriteChat(GW::Chat::CHANNEL_GWCA1, std::format(L"Send Dialog <a=1>{}</a>.", dialog_id).c_str(), L"Dialog");
+            CtoS::SendPacket(0x8, GAME_CMSG_SEND_DIALOG, dialog_id);
+            return true;
+            //return UI::SendUIMessage(UI::UIMessage::kSendDialog, (void*)dialog_id);
         }
 
         AgentArray* GetAgentArray() {
