@@ -20,16 +20,9 @@
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/Module.h>
 #include <GWCA/Managers/StoCMgr.h>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 #include <GWCA/Managers/CtoSMgr.h>
 #include <GWCA/Managers/ChatMgr.h>
 #include <GWCA/Managers/GameThreadMgr.h>
->>>>>>> 3b36018 (restore dialogs ctos)
-=======
-#include <GWCA/Managers/CtoSMgr.h>
->>>>>>> 810eb7d (dont gosignpost for chest)
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/UIMgr.h>
 #include <GWCA/Context/AccountContext.h>
